@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <title>SQL Assignment</title>
+</head>
+<body class="container">
+<h1>SQL Assignment 1: Projects and People</h1>
+<div class="row p-1">
+  <form action="prePopulate" method="post" class="col input-group">
+    <button type="submit" class="btn btn-primary">Pre-populate with data</button>
+  </form>
+</div>
+<div class="row p-1">
+  <form action="addProject" method="post" class="col input-group">
+    <button class="btn btn-primary" type="submit">Add Project</button>
+    <input class="form-control" type="text" placeholder="Project name" name="project_name" required>
+  </form>
+</div>
+<div class="row p-1">
+  <form action="addPerson" method="post" class="col input-group">
+    <button class="btn btn-primary" type="submit">Add Person</button>
+    <input class="form-control" type="text" placeholder="Person name" name="person_name" required>
+    <input class="form-control" type="number" placeholder="hourly pay" name="person_pay" required>
+  </form>
+</div>
+<div class="row p-1 row-cols-lg-auto g-2">
+  <form action="addHours" method="post" class="col input-group">
+      <button class="btn btn-primary" type="submit">Add WorkHour</button>
+      <label class="col-form-label" for="hrs_project">Project</label>
+      <select class="form-select" name="hrs_project" id="hrs_project">
+        <option th:each="project : ${projects}" th:text="${project.name}" th:value="${project.id}">A</option>
+      </select>
+      <label class="col-form-label" for="hrs_person">Person</label>
+      <select class="form-select" name="hrs_person" id="hrs_person">
+        <option th:each="person : ${persons}" th:text="${person.name}" th:value="${person.id}">Joe</option>
+      </select>
+      <label class="form-label" for="hrs_hours"><input class="form-control" type="number" name="hrs_hours" id="hrs_hours"
+                                                       placeholder="hours" required></label>
+  </form>
+</div>
+<div class="row">
+  <div class="col-6 p-1 border border-dark border-2 rounded-3">
+    <h2>Projects</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Delete</th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Total hours</th>
+        <th>Total cost</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="project : ${projects}">
+        <td>
+          <form action="/deleteProject" method="post">
+            <input type="hidden" name="project_id" th:value="${project.id}"></input>
+            <button class="btn btn-danger">x</button>
+          </form>
+        </td>
+        <td th:text="${project.id}">
+          id here
+        </td>
+        <td th:text="${project.name}">name here</td>
+        <td th:text="${project.totalHours}">0</td>
+        <td th:text="${project.totalPay}">0</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6 p-1 border border-dark border-2 rounded-3">
+    <h2>People</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Delete</th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Hourly pay</th>
+        <th>WorkHour worked</th>
+        <th>Total pay</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="person : ${persons}">
+        <td>
+          <form action="/deletePerson" method="post">
+            <input type="hidden" name="person_id" th:value="${person.id}"></input>
+            <button class="btn btn-danger">x</button>
+          </form>
+        </td>
+        <td th:text="${person.id}">id here</td>
+        <td th:text="${person.name}">name here</td>
+        <td th:text="${person.hourlyPay}">hourly pay here</td>
+        <td th:text="${person.totalWorkHours}">total work hours here</td>
+        <td th:text="${person.totalPay}">total pay here</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12 p-1 border border-dark border-2 rounded-3">
+    <h2>WorkHour</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Delete</th>
+        <th>Id</th>
+        <th>Person</th>
+        <th>Project</th>
+        <th>WorkHour</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="hour : ${hours}">
+        <td>
+          <form action="/deleteHours" method="post">
+            <input type="hidden" name="hrs_id" th:value="${hour.id}"></input>
+            <button class="btn btn-danger">x</button>
+          </form>
+        </td>
+        <td th:text="${hour.id}">id here</td>
+        <td th:text="${hour.person.name}">person name here</td>
+        <td th:text="${hour.project.name}">project name here</td>
+        <td th:text="${hour.hours}">hours here</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
