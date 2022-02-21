@@ -52,7 +52,13 @@ public class Helper {
                 workhours.add(new WorkHour(project, person, random.nextInt(20)));
             }
         }
-        // TODO: Need to persist people, projects and workhours
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        for (WorkHour wh : workhours) {
+            Project project = wh.getProject();
+            em.persist(project);
+        }
+        em.getTransaction().commit();
     }
 
     void deleteProject(long project_id) {
