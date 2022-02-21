@@ -30,7 +30,17 @@ public class Helper {
         em.getTransaction().commit();
     }
 
-    void addNewHours(Long project_id, Long person_id, int hours) {}
+    void addNewHours(Long project_id, Long person_id, int hours) {
+        EntityManager em = factory.createEntityManager();
+        Project project = em.find(Project.class, project_id);
+        Person person = em.find(Person.class, person_id);
+        if(project != null & person != null) {
+            WorkHour workHour = new WorkHour(project, person, hours);
+            em.getTransaction().begin();
+            em.persist(workHour);
+            em.getTransaction().commit();
+        }
+    }
 
     HashMap<String, Object> gatherInfo() {
         HashMap<String, Object> map = new HashMap<>();
@@ -55,7 +65,8 @@ public class Helper {
     }
 
     private List<WorkHour> getAllHours() {
-        return new ArrayList<>();
+        EntityManager em = factory.createEntityManager();
+        return em.createQuery("SELECT wh FROM WorkHour wh", WorkHour.class).getResultList();
     }
 
     void prePopulate() {
@@ -72,8 +83,10 @@ public class Helper {
         for (WorkHour wh : workhours) {
             Project project = wh.getProject();
             Person person = wh.getPerson();
+            WorkHour workHour = new WorkHour(project, person, person.getHourlyPay());
             em.persist(project);
             em.persist(person);
+            em.persist(workHour);
         }
         em.getTransaction().commit();
     }
@@ -99,5 +112,11 @@ public class Helper {
     }
 
     void deleteWorkhour(long hrs_id) {
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.createQuery("delete from WorkHour where id = :id")
+                .setParameter("id", hrs_id)
+                .executeUpdate();
+        em.getTransaction().commit();
     }
 }
