@@ -56,6 +56,12 @@ public class Helper {
     }
 
     void deleteProject(long project_id) {
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.createQuery("delete from Project where id = :id")
+                .setParameter("id", project_id)
+                .executeUpdate();
+        em.getTransaction().commit();
     }
 
     void deletePerson(long person_id) {
