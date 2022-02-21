@@ -1,18 +1,27 @@
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(nullable=false)
     private String name;
 
+    @Column
     private int hourlyPay;
 
+    @Transient
     private List<WorkHour> workhours;
 
     public Person(String name, int hourlyPay) {
         this.name = name;
         this.hourlyPay = hourlyPay;
     }
+
+    private Person(){}
 
     public String getName() {
         return name;

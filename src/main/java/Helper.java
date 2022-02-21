@@ -1,6 +1,10 @@
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +22,13 @@ public class Helper {
         em.getTransaction().commit();
     }
 
-    void addNewPerson(String name, int hourlyPay) {}
+    void addNewPerson(String name, int hourlyPay) {
+        EntityManager em = factory.createEntityManager();
+        Person person = new Person(name, hourlyPay);
+        em.getTransaction().begin();
+        em.persist(person);
+        em.getTransaction().commit();
+    }
 
     void addNewHours(Long project_id, Long person_id, int hours) {}
 
@@ -35,8 +45,13 @@ public class Helper {
         return em.createQuery("SELECT p FROM Project p", Project.class).getResultList();
     }
 
-    private List<Person> getAllPersons() {
-        return new ArrayList<>();
+    private List<Person> getAllPersons(){
+        EntityManager em = factory.createEntityManager();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Person> query = builder.createQuery(Person.class);
+        Root<Person> personRoot = query.from(Person.class);
+        query.select(personRoot);
+        return em.createQuery(query).getResultList();
     }
 
     private List<WorkHour> getAllHours() {
@@ -56,7 +71,9 @@ public class Helper {
         em.getTransaction().begin();
         for (WorkHour wh : workhours) {
             Project project = wh.getProject();
+            Person person = wh.getPerson();
             em.persist(project);
+            em.persist(person);
         }
         em.getTransaction().commit();
     }
@@ -71,7 +88,14 @@ public class Helper {
     }
 
     void deletePerson(long person_id) {
-
+        EntityManager em = factory.createEntityManager();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaDelete<Person> criteriaDelete = builder.createCriteriaDelete(Person.class);
+        Root<Person> personRoot = criteriaDelete.from(Person.class);
+        criteriaDelete.where(builder.equal(personRoot.get("id"), person_id));
+        em.getTransaction().begin();
+        em.createQuery(criteriaDelete).executeUpdate();
+        em.getTransaction().commit();
     }
 
     void deleteWorkhour(long hrs_id) {
