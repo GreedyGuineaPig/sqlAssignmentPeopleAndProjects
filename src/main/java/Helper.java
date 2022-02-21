@@ -1,4 +1,5 @@
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +7,7 @@ import java.util.Random;
 
 public class Helper {
     private final Random random = new Random();
-    private static final EntityManagerFactory factory = null;
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
 
     void addNewProject(String name) {}
 
