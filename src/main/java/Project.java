@@ -11,7 +11,7 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private List<WorkHour> workHours;
 
     public Project(String name) {

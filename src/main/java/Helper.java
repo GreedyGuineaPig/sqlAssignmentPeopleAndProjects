@@ -93,30 +93,31 @@ public class Helper {
 
     void deleteProject(long project_id) {
         EntityManager em = factory.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery("delete from Project where id = :id")
-                .setParameter("id", project_id)
-                .executeUpdate();
-        em.getTransaction().commit();
+        Project project = em.find(Project.class, project_id);
+        if(project != null){
+            em.getTransaction().begin();
+            em.remove(project);
+            em.getTransaction().commit();
+        }
     }
 
     void deletePerson(long person_id) {
         EntityManager em = factory.createEntityManager();
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaDelete<Person> criteriaDelete = builder.createCriteriaDelete(Person.class);
-        Root<Person> personRoot = criteriaDelete.from(Person.class);
-        criteriaDelete.where(builder.equal(personRoot.get("id"), person_id));
-        em.getTransaction().begin();
-        em.createQuery(criteriaDelete).executeUpdate();
-        em.getTransaction().commit();
+        Person person = em.find(Person.class, person_id);
+        if(person != null){
+            em.getTransaction().begin();
+            em.remove(person);
+            em.getTransaction().commit();
+        }
     }
 
     void deleteWorkhour(long hrs_id) {
         EntityManager em = factory.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery("delete from WorkHour where id = :id")
-                .setParameter("id", hrs_id)
-                .executeUpdate();
-        em.getTransaction().commit();
+        WorkHour workHour = em.find(WorkHour.class, hrs_id);
+        if(workHour != null){
+            em.getTransaction().begin();
+            em.remove(workHour);
+            em.getTransaction().commit();
+        }
     }
 }

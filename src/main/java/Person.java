@@ -13,7 +13,7 @@ public class Person {
     @Column
     private int hourlyPay;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<WorkHour> workhours;
 
     public Person(String name, int hourlyPay) {
