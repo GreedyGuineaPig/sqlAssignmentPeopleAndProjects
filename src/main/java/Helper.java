@@ -1,3 +1,4 @@
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.ArrayList;
@@ -9,7 +10,13 @@ public class Helper {
     private final Random random = new Random();
     private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
 
-    void addNewProject(String name) {}
+    void addNewProject(String name) {
+        Project project = new Project(name);
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(project);
+        em.getTransaction().commit();
+    }
 
     void addNewPerson(String name, int hourlyPay) {}
 
@@ -24,7 +31,8 @@ public class Helper {
     }
 
     private List<Project> getAllProjects() {
-        return new ArrayList<>();
+        EntityManager em = factory.createEntityManager();
+        return em.createQuery("SELECT p FROM Project p", Project.class).getResultList();
     }
 
     private List<Person> getAllPersons() {
