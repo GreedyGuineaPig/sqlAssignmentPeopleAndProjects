@@ -61,6 +61,7 @@ public class Helper {
         CriteriaQuery<Person> query = builder.createQuery(Person.class);
         Root<Person> personRoot = query.from(Person.class);
         query.select(personRoot);
+
         return em.createQuery(query).getResultList();
     }
 

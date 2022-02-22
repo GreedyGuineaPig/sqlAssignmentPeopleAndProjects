@@ -14,7 +14,7 @@ public class Person {
     private int hourlyPay;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-    private List<WorkHour> workhours;
+    private List<WorkHour> workHours;
 
     public Person(String name, int hourlyPay) {
         this.name = name;
@@ -35,15 +35,21 @@ public class Person {
         return id;
     }
 
-    public List<WorkHour> getWorkHours() {
-        return workhours;
-    }
+    public List<WorkHour> getWorkHours() { return workHours; }
 
     public int getTotalWorkHours() {
-        return 0;
+        int totalWorkHours = 0;
+        for(WorkHour wh: workHours){
+            totalWorkHours += wh.getHours();
+        }
+        return totalWorkHours;
     }
 
     public int getTotalPay() {
-        return 0;
+        int totalPay = 0;
+        for(WorkHour wh: workHours){
+            totalPay += wh.getHours();
+        }
+        return totalPay;
     }
 }

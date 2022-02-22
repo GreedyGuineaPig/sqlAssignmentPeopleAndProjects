@@ -40,6 +40,6 @@ public class WorkHour {
     }
 
     public int getCost() {
-        return 0;
+        return hours * person.getHourlyPay();
     }
 }

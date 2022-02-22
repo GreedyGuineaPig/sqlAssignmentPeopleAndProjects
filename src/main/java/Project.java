@@ -35,10 +35,18 @@ public class Project {
     }
 
     public int getTotalHours() {
-        return 0;
+        int totalHours = 0;
+        for(WorkHour wh: workHours){
+            totalHours += wh.getHours();
+        }
+        return totalHours;
     }
 
     public int getTotalPay() {
-        return 0;
+        int totalPay = 0;
+        for(WorkHour wh: workHours){
+            totalPay += wh.getCost();
+        }
+        return totalPay;
     }
 }
