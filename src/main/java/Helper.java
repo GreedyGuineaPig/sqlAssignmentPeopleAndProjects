@@ -52,7 +52,7 @@ public class Helper {
 
     private List<Project> getAllProjects() {
         EntityManager em = factory.createEntityManager();
-        return em.createQuery("SELECT p FROM Project p", Project.class).getResultList();
+        return em.createQuery("SELECT p FROM Project p ORDER BY p.name ASC", Project.class).getResultList();
     }
 
     private List<Person> getAllPersons(){
@@ -61,7 +61,7 @@ public class Helper {
         CriteriaQuery<Person> query = builder.createQuery(Person.class);
         Root<Person> personRoot = query.from(Person.class);
         query.select(personRoot);
-
+        query.orderBy(builder.asc(personRoot.get("name")));
         return em.createQuery(query).getResultList();
     }
 
